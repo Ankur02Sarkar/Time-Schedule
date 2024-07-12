@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
+import { Box, Typography } from "@mui/material";
 
 const ApxClockGraph = () => {
   const [schedule, setSchedule] = useState([]);
@@ -32,7 +33,10 @@ const ApxClockGraph = () => {
   const series = schedule.map((item) => item.end - item.start);
 
   return (
-    <div>
+    <Box mt={4}>
+      <Typography variant="h4" gutterBottom>
+        Timetable Chart
+      </Typography>
       <Chart
         options={options}
         series={series}
@@ -40,7 +44,7 @@ const ApxClockGraph = () => {
         width={500}
         height={500}
       />
-    </div>
+    </Box>
   );
 };
 
