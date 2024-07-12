@@ -1,15 +1,28 @@
-// src/App.js
 import React from "react";
-import D3ClockGraph from "./components/D3ClockGraph";
-import ReClockGraph from "./components/ReClockGraph";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ApxClockGraph from "./components/ApxClockGraph";
-import "./App.css";
+import AddEventForm from "./components/AddEventForm";
 
 const App = () => {
   return (
-    <div className="App">
-      <ApxClockGraph />
-    </div>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/add-event">Add Event</Link>
+            </li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route path="/" element={<ApxClockGraph />} />
+          <Route path="/add-event" element={<AddEventForm />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

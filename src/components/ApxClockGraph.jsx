@@ -1,20 +1,13 @@
-// src/components/ApxClockGraph.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 
 const ApxClockGraph = () => {
-  const schedule = [
-    { label: "Sleep", start: 0, end: 7, color: "#1f77b4" },
-    { label: "Breakfast", start: 7, end: 7.5, color: "#ff7f0e" },
-    { label: "Commute", start: 7.5, end: 8.5, color: "#2ca02c" },
-    { label: "School", start: 8.5, end: 15.5, color: "#d62728" },
-    { label: "Tennis", start: 15.5, end: 18.5, color: "#9467bd" },
-    { label: "Commute", start: 18.5, end: 19, color: "#8c564b" },
-    { label: "Dinner", start: 19, end: 20, color: "#e377c2" },
-    { label: "Study", start: 20, end: 21, color: "#7f7f7f" },
-    { label: "Reading", start: 21, end: 22, color: "#bcbd22" },
-    { label: "Free", start: 22, end: 24, color: "#17becf" },
-  ];
+  const [schedule, setSchedule] = useState([]);
+
+  useEffect(() => {
+    const storedSchedule = JSON.parse(localStorage.getItem("schedule")) || [];
+    setSchedule(storedSchedule);
+  }, []);
 
   const options = {
     chart: {
@@ -24,6 +17,15 @@ const ApxClockGraph = () => {
     colors: schedule.map((item) => item.color),
     legend: {
       position: "bottom",
+    },
+    tooltip: {
+      y: {
+        formatter: function (val, opts) {
+          return `${opts.w.globals.labels[opts.seriesIndex]}: ${val.toFixed(
+            2
+          )} hours (${((val / 24) * 100).toFixed(2)}%)`;
+        },
+      },
     },
   };
 
