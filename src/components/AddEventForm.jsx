@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { TextField, Button, Grid, Typography, Box } from "@mui/material";
 import { MobileTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 
-const AddEventForm = () => {
+const AddEventForm = ({ refreshEvents }) => {
   const [event, setEvent] = useState("");
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
@@ -32,6 +31,7 @@ const AddEventForm = () => {
     setEnd(null);
     setColor("#000000");
     alert("Event added successfully!");
+    refreshEvents(); // Refresh the list of events
   };
 
   return (

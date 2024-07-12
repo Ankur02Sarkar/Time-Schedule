@@ -4,11 +4,26 @@ import { Box, Typography } from "@mui/material";
 
 const ApxClockGraph = () => {
   const [schedule, setSchedule] = useState([]);
+  const [currentTimeSlot, setCurrentTimeSlot] = useState("");
 
   useEffect(() => {
     const storedSchedule = JSON.parse(localStorage.getItem("schedule")) || [];
     setSchedule(storedSchedule);
+    updateCurrentTimeSlot(storedSchedule);
   }, []);
+
+  const updateCurrentTimeSlot = (schedule) => {
+    const currentTime = new Date().getHours() + new Date().getMinutes() / 60;
+    const currentSlot = schedule.find(
+      (item) => currentTime >= item.start && currentTime < item.end
+    );
+    setCurrentTimeSlot(currentSlot ? currentSlot.label : "No current slot");
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => updateCurrentTimeSlot(schedule), 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, [schedule]);
 
   const options = {
     chart: {
@@ -24,7 +39,27 @@ const ApxClockGraph = () => {
         formatter: function (val, opts) {
           return `${opts.w.globals.labels[opts.seriesIndex]}: ${val.toFixed(
             2
-          )} hours (${((val / 24) * 100).toFixed(2)}%)`;
+          )} hours`;
+        },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val, opts) {
+        return opts.w.globals.labels[opts.seriesIndex];
+      },
+    },
+    plotOptions: {
+      pie: {
+        startAngle: 0,
+        endAngle: 360,
+        customScale: 1,
+        offsetX: 0,
+        offsetY: 0,
+        expandOnClick: true,
+        dataLabels: {
+          offset: 0,
+          minAngleToShowLabel: 10,
         },
       },
     },
@@ -44,6 +79,9 @@ const ApxClockGraph = () => {
         width={500}
         height={500}
       />
+      <Typography variant="h6" mt={2}>
+        Current Time Slot: {currentTimeSlot}
+      </Typography>
     </Box>
   );
 };
